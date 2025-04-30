@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import *as fs from 'fs';
 import * as path from 'path';
 
+console.log(PrismaClient)
 
 const prisma = new PrismaClient();
 
