@@ -208,11 +208,12 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "mysql://graywolf7235:0966875167527k@35.193.164.221:3306/WJ"
+        "value": null
       }
     }
   },

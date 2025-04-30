@@ -1,0 +1,62 @@
+[
+  {
+    "name": "十字耳環",
+    "price": 1050,
+    "image": "https://flic.kr/p/2r1DcGo",
+    "stock": 10
+  },
+  {
+    "name": "四方戒指",
+    "price": 2950,
+    "image": "https://flic.kr/p/2r1xS8g",
+    "stock": 8
+  },
+  {
+    "name": "異鍊手環",
+    "price": 2250,
+    "image": "https://flic.kr/p/2r1DC4t",
+    "stock": 12
+  },
+  {
+    "name": "十字耳環",
+    "price": 1050,
+    "image": "https://flic.kr/p/2r1DcGo",
+    "stock": 6
+  },
+  {
+    "name": "線圓項鍊",
+    "price": 2650,
+    "image": "https://flic.kr/p/2r1CchE",
+    "stock": 9
+  },
+  {
+    "name": "論文手環",
+    "price": 2350,
+    "image": "https://flic.kr/p/2r1E1SB",
+    "stock": 15
+  },
+  {
+    "name": "雙珠項鍊",
+    "price": 4455,
+    "image": "https://flic.kr/p/2r1DcQj",
+    "stock": 7
+  },
+  {
+    "name": "雙鍊手環",
+    "price": 2350,
+    "image": "https://flic.kr/p/2r1E1Ua",
+    "stock": 11
+  },
+  {
+    "name": "翅膀耳環",
+    "price": 1050,
+    "image": "https://flic.kr/p/2r1CcmT",
+    "stock": 14
+  },
+  {
+    "name": "蒼芎項鍊",
+    "price": 3980,
+    "image": "https://flic.kr/p/2r1E1QC",
+    "stock": 5
+  }
+]
