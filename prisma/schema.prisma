@@ -7,44 +7,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String   @id @default(uuid())
-  email    String   @unique
-  password String 
-  createAt DateTime @default(now())
+model user {
+  id        String   @id @default(uuid())
+  email     String   @unique(map: "User_email_key")
+  password  String
+  name      String?
+  phone     String?
+  createdAt DateTime @default(now())
 
-  orders Order[]
-  shippingInfos ShippingInfo? 
+  shippingInfo shippinginfo?
+  orders       order[]
 }
 
-model ShippingInfo {
-  id             String @id @default(uuid())
+model shippinginfo {
+  id             String   @id @default(uuid())
   recipient      String
   recipientPhone String
-  city           String
-  district       String
   address        String
+  userId         String   @unique(map: "ShippingInfo_userId_key")
 
-  userId         String @unique
-  user           User @relation(fields:[userId], references: [id]) 
+  user           user     @relation(fields: [userId], references: [id])
 }
 
-model Order {
-  id     Int   @id @default(autoincrement())
-  date   DateTime @default(now())
-  total  Int
-  status String 
-
-  userId          String
-  user            User @relation(fields:[userId], references: [id]) 
-}
-
-model Product {
-  id          Int @id @default(autoincrement())
+model product {
+  id          Int      @id @default(autoincrement())
   name        String
   price       Int
   image       String
   stock       Int
   description String?
-  createAt    DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  orderItems  OrderItem[]
 }
+
+model order {
+  id     Int      @id @default(autoincrement())
+  date   DateTime @default(now())
+  total  Int
+  status String
+  userId String
+
+  user     user        @relation(fields: [userId], references: [id])
+  items    OrderItem[]
+
+  @@index([userId], map: "Order_userId_fkey")
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  quantity  Int
+  price     Int
+  orderId   Int
+  productId Int
+
+  order     order    @relation(fields: [orderId], references: [id])
+  product   product  @relation(fields: [productId], references: [id])
+}
+
+

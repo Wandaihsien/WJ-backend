@@ -1,15 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import *as fs from 'fs';
-import * as path from 'path';
 
-console.log(PrismaClient)
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const filePath = path.join(__dirname, 'mockProducts.json');
-  const rawData = fs.readFileSync(filePath, 'utf-8');
+  const rawData = fs.readFileSync('src/scripts/mockProducts.json', 'utf-8');
   const products = JSON.parse(rawData);
+
+  await prisma.product.deleteMany();
+  
+  await prisma.$executeRawUnsafe(`ALTER TABLE Product AUTO_INCREMENT = 1`);
 
   for (const product of products) {
     await prisma.product.create({
@@ -24,7 +25,7 @@ main()
     console.log('所有商品已成功寫入資料庫');
   })
   .catch(() => {
-    console.error('發生錯誤, err');
+    console.error('發生錯誤');
   })
   .finally(async () => {
     await prisma.$disconnect();

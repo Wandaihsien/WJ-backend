@@ -2,61 +2,67 @@
   {
     "name": "十字耳環",
     "price": 1050,
-    "image": "https://flic.kr/p/2r1DcGo",
+    "image": "https://live.staticflickr.com/65535/54484870234_0e511fcfcb_c.jpg",
     "stock": 10
   },
   {
     "name": "四方戒指",
     "price": 2950,
-    "image": "https://flic.kr/p/2r1xS8g",
+    "image": "https://live.staticflickr.com/65535/54483828837_5d00cb247b_z.jpg",
     "stock": 8
   },
   {
     "name": "異鍊手環",
     "price": 2250,
-    "image": "https://flic.kr/p/2r1DC4t",
+    "image": "https://live.staticflickr.com/65535/54484952193_f8062a1948_c.jpg",
     "stock": 12
-  },
-  {
-    "name": "十字耳環",
-    "price": 1050,
-    "image": "https://flic.kr/p/2r1DcGo",
-    "stock": 6
   },
   {
     "name": "線圓項鍊",
     "price": 2650,
-    "image": "https://flic.kr/p/2r1CchE",
+    "image": "https://live.staticflickr.com/65535/54484673746_37379c42d6_c.jpg",
     "stock": 9
   },
   {
     "name": "論文手環",
     "price": 2350,
-    "image": "https://flic.kr/p/2r1E1SB",
+    "image": "https://live.staticflickr.com/65535/54485028935_69339b43ba_c.jpg",
     "stock": 15
   },
   {
     "name": "雙珠項鍊",
     "price": 4455,
-    "image": "https://flic.kr/p/2r1DcQj",
+    "image": "https://live.staticflickr.com/65535/54484870694_7675878277_c.jpg",
     "stock": 7
   },
   {
     "name": "雙鍊手環",
     "price": 2350,
-    "image": "https://flic.kr/p/2r1E1Ua",
+    "image": "https://live.staticflickr.com/65535/54484870694_7675878277_c.jpg",
     "stock": 11
   },
   {
     "name": "翅膀耳環",
     "price": 1050,
-    "image": "https://flic.kr/p/2r1CcmT",
+    "image": "https://live.staticflickr.com/65535/54484673991_750e4af701_c.jpg",
     "stock": 14
   },
   {
     "name": "蒼芎項鍊",
     "price": 3980,
-    "image": "https://flic.kr/p/2r1E1QC",
+    "image": "https://live.staticflickr.com/65535/54485028820_11dba5ae08_c.jpg",
     "stock": 5
+  },
+  {
+    "name": "蜂巢戒指",
+    "price": 1480,
+    "image": "https://live.staticflickr.com/65535/54498071729_dcda0ccf38_z.jpg",
+    "stock": 12
+  },
+  {
+    "name": "異鍊手環",
+    "price": 2350,
+    "image": "https://live.staticflickr.com/65535/54497021862_5421c75cb7_w.jpg",
+    "stock": 6
   }
 ]

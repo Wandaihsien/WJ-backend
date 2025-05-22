@@ -1,15 +1,20 @@
 import express from 'express';
 import orderRoutes from './routes/order';
 import authRoutes from './routes/auth';
+import productRoutes from './routes/product';
+import cors from 'cors';
+
 
 const app = express();
+
+
 app.use(express.json());
+app.use(cors());
 
-app.use('/order', orderRoutes);
-app.use('/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/auth', authRoutes);
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+
 
 export default app;
