@@ -8,53 +8,87 @@ datasource db {
 }
 
 model user {
-  id        String   @id @default(uuid())
-  email     String   @unique(map: "User_email_key")
-  password  String
-  name      String?
-  phone     String?
-  createdAt DateTime @default(now())
+  id           String       @id @default(uuid())
+  email        String       @unique(map: "User_email_key")
+  password     String
+  name         String?
+  phone        String?
+  createdAt    DateTime     @default(now())
 
-  shippingInfo shippinginfo?
   orders       order[]
+  shippingInfo shippinginfo?
+  cart         cart?
 }
 
 model shippinginfo {
-  id             String   @id @default(uuid())
+  id             Int     @id @default(autoincrement())
   recipient      String
   recipientPhone String
   address        String
-  userId         String   @unique(map: "ShippingInfo_userId_key")
+  userId         String  @unique(map: "ShippingInfo_userId_key")
 
-  user           user     @relation(fields: [userId], references: [id])
+  user           user    @relation(fields: [userId], references: [id])
 }
 
 model product {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   name        String
   price       Int
   image       String
   stock       Int
   description String?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime    @default(now())
 
-  orderItems  OrderItem[]
+  cartItems   cartItem[]
+  orderItems  orderitem[]
+}
+
+model cart {
+  id      Int        @id @default(autoincrement())
+  userId  String     @unique
+  user    user       @relation(fields: [userId], references: [id])
+
+  items   cartItem[]
+}
+
+model cartItem {
+  id        Int      @id @default(autoincrement())
+  cartId    Int
+  productId Int
+  quantity  Int
+
+  cart      cart     @relation(fields: [cartId], references: [id])
+  product   product  @relation(fields: [productId], references: [id])
+
+  @@index([cartId])
+  @@index([productId])
+}
+
+enum OrderStatus {
+  pending
+  paid
+  failed
+  cancelled
+  refunded
 }
 
 model order {
-  id     Int      @id @default(autoincrement())
-  date   DateTime @default(now())
-  total  Int
-  status String
-  userId String
+  id             Int          @id @default(autoincrement())
+  tradeNo        String       @unique
+  date           DateTime     @default(now())
+  total          Int
+  status         OrderStatus  @default(pending)
+  paymentMethod  String?
+  paymentId      String?
+  userId         String
 
-  user     user        @relation(fields: [userId], references: [id])
-  items    OrderItem[]
+  user           user         @relation(fields: [userId], references: [id])
+  items          orderitem[]
 
   @@index([userId], map: "Order_userId_fkey")
 }
 
-model OrderItem {
+model orderitem {
   id        Int      @id @default(autoincrement())
   quantity  Int
   price     Int
@@ -63,6 +97,7 @@ model OrderItem {
 
   order     order    @relation(fields: [orderId], references: [id])
   product   product  @relation(fields: [productId], references: [id])
+
+  @@index([orderId], map: "OrderItem_orderId_fkey")
+  @@index([productId], map: "OrderItem_productId_fkey")
 }
-
-

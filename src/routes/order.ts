@@ -1,5 +1,5 @@
-import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { Router, Request, Response } from 'express'
+import { PrismaClient } from '@prisma/client'
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -8,11 +8,12 @@ const prisma = new PrismaClient();
 // 建立訂單
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { userId, total,status } = req.body;
-
-    if(!userId || !total || !status) {
-      return res.status(400).json({message:'缺少必要欄位'})
+    const user = (req as any).user
+    const userId = user.userId
+    if( !user || !userId ) {
+      return res.status(400).json({error: '缺少userId'})
     }
+    const { total,status } = req.body;
 
     const newOrder = await prisma.order.create({
       data: {
@@ -32,14 +33,16 @@ router.post('/', async (req: Request, res: Response) => {
 
 
 // 取得所有訂單
-router.get('/user/:userId', async (req: Request, res: Response) => {
-  const userId = req.params.userId;
+router.get('/', async (req: Request, res: Response) => {
+  const user = (req as any).user
+  const userId = user.userId
 
-  if(Number.isNaN(userId)) {
-    return res.status(400).json({ message : 'userId 必須是數字' });
+  if( !user || !userId ) {
+    return res.status(400).json({error: '缺少userId'})
   }
+
   try {
-    const orders = await prisma.order.findmany({
+    const orders = await prisma.order.findMany({
       where: { userId},
       orderBy: { date: 'desc'}
     })
