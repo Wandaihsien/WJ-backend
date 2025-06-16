@@ -12,13 +12,13 @@ router.post("/", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "缺少userId" });
     }
     const userId = user.userId;
-    const { total, status } = req.body;
+    const { total } = req.body;
 
     const newOrder = await prisma.order.create({
       data: {
         userId,
         total,
-        status,
+        tradeNo: `WJ${Date.now()}`,
       },
     });
 

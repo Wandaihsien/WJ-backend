@@ -78,7 +78,7 @@ model order {
   date           DateTime     @default(now())
   total          Int
   status         OrderStatus  @default(pending)
-  paymentMethod  String?
+  paymentMethod  String      @default("CREDIT")
   paymentId      String?
   userId         String
 

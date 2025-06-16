@@ -64,7 +64,7 @@ CREATE TABLE `order` (
     `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `total` INTEGER NOT NULL,
     `status` ENUM('pending', 'paid', 'failed', 'cancelled', 'refunded') NOT NULL DEFAULT 'pending',
-    `paymentMethod` VARCHAR(191) NULL,
+    `paymentMethod` VARCHAR(191) NOT NULL DEFAULT 'CREDIT',
     `paymentId` VARCHAR(191) NULL,
     `userId` VARCHAR(191) NOT NULL,
 
