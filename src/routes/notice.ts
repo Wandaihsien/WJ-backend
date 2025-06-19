@@ -9,6 +9,16 @@ const prisma = new PrismaClient();
 const HASH_KEY = process.env.HASH_KEY;
 const HASH_IV = process.env.HASH_IV;
 
+const verifyTradeSha = (tradeInfo: string, tradeSha: string) => {
+  const raw = `HashKey=${HASH_KEY}&${tradeInfo}&HashIV=${HASH_IV}`;
+  const calculatedSha = crypto
+    .createHash("sha256")
+    .update(raw)
+    .digest("hex")
+    .toUpperCase();
+  return calculatedSha === tradeSha;
+};
+
 const aesDecrypt = (encryptedText: string) => {
   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
   const key = Buffer.from(HASH_KEY, "utf8");
@@ -21,24 +31,24 @@ const aesDecrypt = (encryptedText: string) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const tradeInfo = req.body?.TradeInfo;
-    console.log("notice的 TradeInfo:", tradeInfo);
-    console.log("完整的 req.body:", req.body);
-    console.log("req.body 的 keys:", Object.keys(req.body));
-    console.log("TradeInfo 類型:", typeof tradeInfo);
-    console.log("TradeInfo 長度:", tradeInfo?.length);
-    console.log("TradeInfo 前 100 字符:", tradeInfo?.substring(0, 100));
+    const { TradeInfo, TradeSha } = req.body;
 
-    // 檢查是否為有效的 hex 字串
-    const isValidHex = /^[0-9A-Fa-f]+$/.test(tradeInfo);
-    console.log("是否為有效 hex:", isValidHex);
+    console.log("收到藍新回調:");
+    console.log("TradeInfo:", TradeInfo?.substring(0, 50) + "...");
+    console.log("TradeSha:", TradeSha);
 
-    if (!isValidHex) {
-      console.error("TradeInfo 不是有效的 hex 格式");
+    // 1. 先驗證 TradeSha
+    if (!verifyTradeSha(TradeInfo, TradeSha)) {
+      console.error("TradeSha 驗證失敗");
       return res.send("SUCCESS");
     }
+
+    console.log("TradeSha 驗證成功");
+
+    // 2. 解密 TradeInfo
+
     let data: any;
-    data = aesDecrypt(tradeInfo);
+    data = aesDecrypt(TradeInfo);
     console.log("解密後的 data:", data);
     const { Status, Result } = data;
     if (Status === "SUCCESS") {
