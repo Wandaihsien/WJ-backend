@@ -13,7 +13,7 @@ const aesDecrypt = (encryptedText: string) => {
   const decipher = crypto.createDecipheriv("aes-256-cbc", HASH_KEY, HASH_IV);
   let decrypted = decipher.update(encryptedText, "hex", "utf8");
   decrypted += decipher.final("utf-8");
-  return qs.parse(decrypted);
+  return JSON.parse(decrypted);
 };
 
 router.post("/", async (req: Request, res: Response) => {
@@ -22,12 +22,12 @@ router.post("/", async (req: Request, res: Response) => {
     console.log("notice的 TradeInfo:", req.body?.TradeInfo);
     const data: any = aesDecrypt(tradeInfo);
     console.log("解密後的 data:", data);
-    const { Status, MerchantOrderNo } = data;
+    const { Status, Result } = data;
     console.log("Status:", data.Status);
 
     if (Status === "SUCCESS") {
       await prisma.order.update({
-        where: { tradeNo: MerchantOrderNo },
+        where: { tradeNo: Result.MerchantOrderNo },
         data: { status: "paid" },
       });
       console.log("訂單狀態已更新為 paid");
