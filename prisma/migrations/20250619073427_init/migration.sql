@@ -63,7 +63,7 @@ CREATE TABLE `order` (
     `tradeNo` VARCHAR(191) NOT NULL,
     `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `total` INTEGER NOT NULL,
-    `status` ENUM('pending', 'paid', 'failed', 'cancelled', 'refunded') NOT NULL DEFAULT 'pending',
+    `status` ENUM('PENDING', 'PAID', 'FAILED', 'CANCELED') NOT NULL DEFAULT 'PENDING',
     `paymentMethod` VARCHAR(191) NOT NULL DEFAULT 'CREDIT',
     `paymentId` VARCHAR(191) NULL,
     `userId` VARCHAR(191) NOT NULL,
