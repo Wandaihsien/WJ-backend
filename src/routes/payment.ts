@@ -42,9 +42,9 @@ router.post("/", async (req: Request, res: Response) => {
       ItemDesc: "WJ 訂單",
       Email: email,
       LoginType: 0,
-      ReturnURL: "https://wj-backend.onrender.com/api/notice",
+      ReturnURL: "https://wj-frontend.onrender.com/checkout/success",
       NotifyURL: "https://wj-backend.onrender.com/api/notice",
-      ClientBackURL: "https://wj-frontend.onrender.com/user",
+      ClientBackURL: "https://wj-frontend.onrender.com",
     };
     console.log("payment的 TradeInfo:", tradeInfo);
 
