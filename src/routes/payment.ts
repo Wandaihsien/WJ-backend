@@ -46,6 +46,7 @@ router.post("/", async (req: Request, res: Response) => {
       NotifyURL: "https://wj-backend.onrender.com/api/notice",
       ClientBackURL: "https://wj-frontend.onrender.com/user",
     };
+    console.log("payment的 TradeInfo:", tradeInfo);
 
     const encrypted = aesEncrypt(qs.stringify(tradeInfo));
     const tradeSha = makeTradeSha(encrypted);

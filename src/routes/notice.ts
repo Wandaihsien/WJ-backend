@@ -18,17 +18,19 @@ const aesDecrypt = (encryptedText: string) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    console.log("收到藍新通知", req.body);
-    const tradeInfo = req.body?.TradeInfo;
-    console.log("收到的 TradeInfo:", req.body?.TradeInfo);
+    const tradeInfo = decodeURIComponent(req.body?.TradeInfo);
+    console.log("notice的 TradeInfo:", req.body?.TradeInfo);
     const data: any = aesDecrypt(tradeInfo);
+    console.log("解密後的 data:", data);
     const { Status, MerchantOrderNo } = data;
+    console.log("Status:", data.Status);
 
     if (Status === "SUCCESS") {
       await prisma.order.update({
         where: { tradeNo: MerchantOrderNo },
         data: { status: "paid" },
       });
+      console.log("訂單狀態已更新為 paid");
     }
     res.send("SUCCESS");
   } catch (error) {
