@@ -11,7 +11,7 @@ const HASH_IV = "C0VX917qlkej3iUP";
 const aesDecrypt = (encryptedText: string) => {
   const decipher = crypto.createDecipheriv("aes-256-cbc", HASH_KEY, HASH_IV);
   let decrypted = decipher.update(encryptedText, "hex", "utf8");
-  decrypted += decipher.final("utf-8");
+  decrypted += decipher.final("utf8");
   return JSON.parse(decrypted);
 };
 
