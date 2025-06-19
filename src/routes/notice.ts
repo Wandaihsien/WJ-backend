@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import crypto from "crypto";
-import qs from "qs";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -31,6 +30,7 @@ router.post("/", async (req: Request, res: Response) => {
           where: { tradeNo: Result.MerchantOrderNo },
           data: { status: "paid" },
         });
+        console.log("資料庫 tradeNo:", Result.MerchantOrderNo);
         console.log("訂單狀態已更新為 paid");
       }
     } catch (error) {
