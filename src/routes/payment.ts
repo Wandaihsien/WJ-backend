@@ -12,8 +12,8 @@ const PAY_GATEWAY = "https://ccore.newebpay.com/MPG/mpg_gateway";
 // 將交易資料進行 AES 加密（AES-256-CBC）
 const aesEncrypt = (data: string) => {
   const cipher = crypto.createCipheriv("aes-256-cbc", HASH_KEY, HASH_IV);
-  let encrypted = cipher.update(data, "utf8", "hex");
-  encrypted += cipher.final("hex");
+  let encrypted = cipher.update(data, "utf8", "base64");
+  encrypted += cipher.final("base64");
   return encrypted;
 };
 
