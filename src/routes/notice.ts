@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import crypto from "crypto";
+import qs from "qs";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -10,9 +11,9 @@ const HASH_IV = "C0VX917qlkej3iUP";
 
 const aesDecrypt = (encryptedText: string) => {
   const decipher = crypto.createDecipheriv("aes-256-cbc", HASH_KEY, HASH_IV);
-  let decrypted = decipher.update(encryptedText, "base64", "utf8");
+  let decrypted = decipher.update(encryptedText, "hex", "utf8");
   decrypted += decipher.final("utf8");
-  return JSON.parse(decrypted);
+  return qs.parse(decrypted);
 };
 
 router.post("/", async (req: Request, res: Response) => {
