@@ -4,13 +4,14 @@ import qs from "qs";
 
 const router = Router();
 
-const HASH_KEY = "asB7AyQwufOSNDyi2cVAP9Qweqws2gq6";
-const HASH_IV = "C0VX917qlkej3iUP";
+const HASH_KEY = process.env.HASH_KEY;
+const HASH_IV = process.env.HASH_IV;
 const MERCHANT_ID = "MS156088117";
 const PAY_GATEWAY = "https://ccore.newebpay.com/MPG/mpg_gateway";
 
 // 將交易資料進行 AES 加密（AES-256-CBC）
 const aesEncrypt = (data: string) => {
+  if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
   const cipher = crypto.createCipheriv("aes-256-cbc", HASH_KEY, HASH_IV);
   let encrypted = cipher.update(data, "utf8", "hex");
   encrypted += cipher.final("hex");

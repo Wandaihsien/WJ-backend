@@ -6,11 +6,14 @@ import qs from "qs";
 const router = Router();
 const prisma = new PrismaClient();
 
-const HASH_KEY = "asB7AyQwufOSNDyi2cVAP9Qweqws2gq6";
-const HASH_IV = "C0VX917qlkej3iUP";
+const HASH_KEY = process.env.HASH_KEY;
+const HASH_IV = process.env.HASH_IV;
 
 const aesDecrypt = (encryptedText: string) => {
-  const decipher = crypto.createDecipheriv("aes-256-cbc", HASH_KEY, HASH_IV);
+  if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
+  const key = Buffer.from(HASH_KEY, "utf8");
+  const iv = Buffer.from(HASH_IV, "utf8");
+  const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
   let decrypted = decipher.update(encryptedText, "hex", "utf8");
   decrypted += decipher.final("utf8");
   return qs.parse(decrypted);
@@ -18,7 +21,7 @@ const aesDecrypt = (encryptedText: string) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const tradeInfo = decodeURIComponent(req.body?.TradeInfo);
+    const tradeInfo = req.body?.TradeInfo;
     console.log("notice的 TradeInfo:", tradeInfo);
     let data: any;
 
