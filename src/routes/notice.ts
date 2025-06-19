@@ -24,21 +24,16 @@ router.post("/", async (req: Request, res: Response) => {
     const tradeInfo = req.body?.TradeInfo;
     console.log("notice的 TradeInfo:", tradeInfo);
     let data: any;
-
-    try {
-      data = aesDecrypt(tradeInfo);
-      console.log("解密後的 data:", data);
-      const { Status, Result } = data;
-      if (Status === "SUCCESS") {
-        await prisma.order.update({
-          where: { tradeNo: Result.MerchantOrderNo },
-          data: { status: "paid" },
-        });
-        console.log("資料庫 tradeNo:", Result.MerchantOrderNo);
-        console.log("訂單狀態已更新為 paid");
-      }
-    } catch (error) {
-      console.error("解密失敗", error);
+    data = aesDecrypt(tradeInfo);
+    console.log("解密後的 data:", data);
+    const { Status, Result } = data;
+    if (Status === "SUCCESS") {
+      await prisma.order.update({
+        where: { tradeNo: Result.MerchantOrderNo },
+        data: { status: "paid" },
+      });
+      console.log("資料庫 tradeNo:", Result.MerchantOrderNo);
+      console.log("訂單狀態已更新為 paid");
     }
     res.send("SUCCESS");
   } catch (error) {
