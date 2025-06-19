@@ -18,7 +18,9 @@ const aesDecrypt = (encryptedText: string) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
+    console.log("收到藍新通知", req.body);
     const tradeInfo = req.body?.TradeInfo;
+    console.log("收到的 TradeInfo:", req.body?.TradeInfo);
     const data: any = aesDecrypt(tradeInfo);
     const { Status, MerchantOrderNo } = data;
 
@@ -28,7 +30,7 @@ router.post("/", async (req: Request, res: Response) => {
         data: { status: "paid" },
       });
     }
-    res.sendStatus(200);
+    res.send("SUCCESS");
   } catch (error) {
     console.error("付款通知處理失敗", error);
     res.sendStatus(500);
