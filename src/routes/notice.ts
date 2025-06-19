@@ -19,23 +19,27 @@ const aesDecrypt = (encryptedText: string) => {
 router.post("/", async (req: Request, res: Response) => {
   try {
     const tradeInfo = decodeURIComponent(req.body?.TradeInfo);
-    console.log("notice的 TradeInfo:", req.body?.TradeInfo);
-    const data: any = aesDecrypt(tradeInfo);
-    console.log("解密後的 data:", data);
-    const { Status, Result } = data;
-    console.log("Status:", data.Status);
+    console.log("notice的 TradeInfo:", tradeInfo);
+    let data: any;
 
-    if (Status === "SUCCESS") {
-      await prisma.order.update({
-        where: { tradeNo: Result.MerchantOrderNo },
-        data: { status: "paid" },
-      });
-      console.log("訂單狀態已更新為 paid");
+    try {
+      data = aesDecrypt(tradeInfo);
+      console.log("解密後的 data:", data);
+      const { Status, Result } = data;
+      if (Status === "SUCCESS") {
+        await prisma.order.update({
+          where: { tradeNo: Result.MerchantOrderNo },
+          data: { status: "paid" },
+        });
+        console.log("訂單狀態已更新為 paid");
+      }
+    } catch (error) {
+      console.error("解密失敗", error);
     }
     res.send("SUCCESS");
   } catch (error) {
     console.error("付款通知處理失敗", error);
-    res.sendStatus(500);
+    res.send("SUCCESS");
   }
 });
 
