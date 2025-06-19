@@ -60,10 +60,10 @@ model cartItem {
 }
 
 enum OrderStatus {
-  PENDING
-  PAID
-  FAILED
-  CANCELED
+  pending
+  paid
+  failed
+  canceled
 }
 
 model order {
@@ -71,7 +71,7 @@ model order {
   tradeNo       String      @unique
   date          DateTime    @default(now())
   total         Int
-  status        OrderStatus @default(PENDING)
+  status        OrderStatus @default(pending)
   paymentMethod String      @default("CREDIT")
   paymentId     String?
   userId        String

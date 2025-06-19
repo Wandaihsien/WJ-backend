@@ -25,7 +25,7 @@ router.post("/", async (req: Request, res: Response) => {
     if (Status === "SUCCESS") {
       await prisma.order.update({
         where: { tradeNo: MerchantOrderNo },
-        data: { status: "PAID" },
+        data: { status: "paid" },
       });
     }
     res.sendStatus(200);
