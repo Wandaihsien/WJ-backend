@@ -23,6 +23,20 @@ router.post("/", async (req: Request, res: Response) => {
   try {
     const tradeInfo = req.body?.TradeInfo;
     console.log("notice的 TradeInfo:", tradeInfo);
+    console.log("完整的 req.body:", req.body);
+    console.log("req.body 的 keys:", Object.keys(req.body));
+    console.log("TradeInfo 類型:", typeof tradeInfo);
+    console.log("TradeInfo 長度:", tradeInfo?.length);
+    console.log("TradeInfo 前 100 字符:", tradeInfo?.substring(0, 100));
+
+    // 檢查是否為有效的 hex 字串
+    const isValidHex = /^[0-9A-Fa-f]+$/.test(tradeInfo);
+    console.log("是否為有效 hex:", isValidHex);
+
+    if (!isValidHex) {
+      console.error("TradeInfo 不是有效的 hex 格式");
+      return res.send("SUCCESS");
+    }
     let data: any;
     data = aesDecrypt(tradeInfo);
     console.log("解密後的 data:", data);
