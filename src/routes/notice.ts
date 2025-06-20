@@ -37,15 +37,30 @@ const aesDecrypt = (encryptedText: string) => {
   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
 
   try {
-    // 藍新金流可能需要不同的編碼方式
-    const key = crypto.createHash("sha256").update(HASH_KEY).digest();
-    const iv = Buffer.from(HASH_IV, "utf8").slice(0, 16); // 確保 IV 是 16 bytes
+    console.log("開始解密...");
+    console.log("原始 HASH_KEY 長度:", HASH_KEY.length);
+    console.log("原始 HASH_IV 長度:", HASH_IV.length);
+
+    // 藍新金流使用 SHA256 處理 Key，前 32 bytes
+    const key = crypto
+      .createHash("sha256")
+      .update(HASH_KEY)
+      .digest()
+      .slice(0, 32);
+    // IV 直接使用前 16 bytes
+    const iv = Buffer.from(HASH_IV, "utf8").slice(0, 16);
+
+    console.log("處理後 key 長度:", key.length);
+    console.log("處理後 iv 長度:", iv.length);
 
     const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
-    decipher.setAutoPadding(true); // 添加這行
+    decipher.setAutoPadding(true);
 
     let decrypted = decipher.update(encryptedText, "hex", "utf8");
     decrypted += decipher.final("utf8");
+
+    console.log("解密成功，資料長度:", decrypted.length);
+    console.log("解密後前 100 字元:", decrypted.substring(0, 100));
 
     return qs.parse(decrypted);
   } catch (error: any) {
