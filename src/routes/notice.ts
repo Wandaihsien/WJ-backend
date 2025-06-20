@@ -9,6 +9,8 @@ const prisma = new PrismaClient();
 const HASH_KEY = process.env.HASH_KEY;
 const HASH_IV = process.env.HASH_IV;
 
+console.log("HASH_KEY:", HASH_KEY, "length:", HASH_KEY?.length);
+console.log("HASH_IV:", HASH_IV, "length:", HASH_IV?.length);
 const verifyTradeSha = (tradeInfo: string, tradeSha: string) => {
   const raw = `HashKey=${HASH_KEY}&${tradeInfo}&HashIV=${HASH_IV}`;
   const calculatedSha = crypto
@@ -19,18 +21,11 @@ const verifyTradeSha = (tradeInfo: string, tradeSha: string) => {
   return calculatedSha === tradeSha;
 };
 
-// const aesDecrypt = (encryptedText: string) => {
-//   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
-//   const key = Buffer.from(HASH_KEY, "utf8");
-//   const iv = Buffer.from(HASH_IV, "utf8");
-//   const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
-//   let decrypted = decipher.update(encryptedText, "hex", "utf8");
-//   decrypted += decipher.final("utf8");
-//   return qs.parse(decrypted);
-// };
 const aesDecrypt = (encryptedText: string) => {
   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
-  const decipher = crypto.createDecipheriv("aes-256-cbc", HASH_KEY, HASH_IV);
+  const key = Buffer.from(HASH_KEY, "utf8");
+  const iv = Buffer.from(HASH_IV, "utf8");
+  const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
   let decrypted = decipher.update(encryptedText, "hex", "utf8");
   decrypted += decipher.final("utf8");
   return qs.parse(decrypted);
