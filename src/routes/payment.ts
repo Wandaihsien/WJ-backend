@@ -50,7 +50,7 @@ router.post("/", async (req: Request, res: Response) => {
       ItemDesc: "WJ 訂單",
       Email: email,
       LoginType: 0,
-      ReturnURL: "https://wj-frontend.onrender.com/checkout/success",
+      ReturnURL: "https://wj-backend.onrender.com/api/notice/return",
       NotifyURL: "https://wj-backend.onrender.com/api/notice",
       ClientBackURL: "https://wj-frontend.onrender.com",
     };
