@@ -37,19 +37,19 @@ const aesDecrypt = (encryptedText: string) => {
   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
 
   try {
-    const key = Buffer.from(HASH_KEY, "utf8");
-    const iv = Buffer.from(HASH_IV, "utf8");
-
-    // 檢查金鑰長度
-    if (key.length !== 32) throw new Error("AES-256 需要 32 字節的金鑰");
-    if (iv.length !== 16) throw new Error("AES-CBC 需要 16 字節的 IV");
+    // 藍新金流可能需要不同的編碼方式
+    const key = crypto.createHash("sha256").update(HASH_KEY).digest();
+    const iv = Buffer.from(HASH_IV, "utf8").slice(0, 16); // 確保 IV 是 16 bytes
 
     const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
+    decipher.setAutoPadding(true); // 添加這行
+
     let decrypted = decipher.update(encryptedText, "hex", "utf8");
     decrypted += decipher.final("utf8");
 
     return qs.parse(decrypted);
   } catch (error: any) {
+    console.error("解密詳細錯誤:", error);
     throw new Error(`解密失敗: ${error.message}`);
   }
 };
@@ -59,9 +59,11 @@ router.post("/", async (req: Request, res: Response) => {
     const { TradeInfo, TradeSha } = req.body;
 
     console.log("收到藍新回調:");
-    console.log("TradeInfo:", TradeInfo?.substring(0, 50) + "...");
+    console.log("TradeInfo length:", TradeInfo?.length);
+    console.log("TradeInfo first 100 chars:", TradeInfo?.substring(0, 100));
     console.log("TradeSha:", TradeSha);
-
+    console.log("HASH_KEY exists:", !!HASH_KEY);
+    console.log("HASH_IV exists:", !!HASH_IV);
     // 1. 先驗證 TradeSha
     if (!verifyTradeSha(TradeInfo, TradeSha)) {
       console.error("TradeSha 驗證失敗");
