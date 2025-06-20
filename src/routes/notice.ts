@@ -38,7 +38,7 @@ router.post("/", async (req: Request, res: Response) => {
   try {
     const { TradeInfo, TradeSha } = req.body;
 
-    console.log("收到藍新回調:");
+    console.log("收到藍新回調:req.body");
     console.log("TradeInfo length:", TradeInfo?.length);
     console.log("TradeInfo first 100 chars:", TradeInfo?.substring(0, 100));
     console.log("TradeSha:", TradeSha);
