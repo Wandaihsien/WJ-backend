@@ -60,17 +60,17 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
+const BASE_URL = process.env.BASE_URL;
 router.post("/return", (req: Request, res: Response) => {
   try {
     const tradeInfo = req.body?.TradeInfo;
-    const data = aesDecrypt(tradeInfo); // ← 你自己已有的解密函數
-
+    const data = aesDecrypt(tradeInfo);
     // 這裡可以更新資料庫、驗證付款等等...
     const orderNo = data.Result.MerchantOrderNo;
-    res.redirect(`/checkout/success?orderNo=${orderNo}`);
+    res.redirect(`${BASE_URL}/checkout/success?orderNo=${orderNo}`);
   } catch (err) {
     console.error("處理失敗:", err);
-    res.redirect("/checkout/failed");
+    res.redirect(`${BASE_URL}/checkout/failed`);
   }
 });
 
