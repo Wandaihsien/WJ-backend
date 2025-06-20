@@ -9,6 +9,11 @@ const HASH_IV = process.env.HASH_IV;
 const MERCHANT_ID = "MS156088117";
 const PAY_GATEWAY = "https://ccore.newebpay.com/MPG/mpg_gateway";
 
+if (!HASH_KEY || !HASH_IV) {
+  throw new Error("環境變數 HASH_KEY 或 HASH_IV 沒有正確讀取！");
+}
+console.log("PHASH_KEY:", HASH_KEY, "length:", HASH_KEY.length);
+console.log("PHASH_IV:", HASH_IV, "length:", HASH_IV.length);
 // 將交易資料進行 AES 加密（AES-256-CBC）
 const aesEncrypt = (data: string) => {
   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");

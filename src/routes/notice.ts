@@ -9,8 +9,11 @@ const prisma = new PrismaClient();
 const HASH_KEY = process.env.HASH_KEY;
 const HASH_IV = process.env.HASH_IV;
 
-console.log("HASH_KEY:", HASH_KEY, "length:", HASH_KEY?.length);
-console.log("HASH_IV:", HASH_IV, "length:", HASH_IV?.length);
+if (!HASH_KEY || !HASH_IV) {
+  throw new Error("環境變數 HASH_KEY 或 HASH_IV 沒有正確讀取！");
+}
+console.log("HASH_KEY:", HASH_KEY, "length:", HASH_KEY.length);
+console.log("HASH_IV:", HASH_IV, "length:", HASH_IV.length);
 const verifyTradeSha = (tradeInfo: string, tradeSha: string) => {
   const raw = `HashKey=${HASH_KEY}&${tradeInfo}&HashIV=${HASH_IV}`;
   const calculatedSha = crypto
