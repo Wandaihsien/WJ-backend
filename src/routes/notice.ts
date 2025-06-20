@@ -36,26 +36,13 @@ const aesDecrypt = (encryptedText: string) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const { TradeInfo, TradeSha } = req.body;
-
-    console.log("收到藍新回調:req.body");
-    console.log("TradeInfo length:", TradeInfo?.length);
-    console.log("TradeInfo first 100 chars:", TradeInfo?.substring(0, 100));
-    console.log("TradeSha:", TradeSha);
+    console.log("收到藍新回調:,");
     console.log("HASH_KEY exists:", !!HASH_KEY);
     console.log("HASH_IV exists:", !!HASH_IV);
-    // 1. 先驗證 TradeSha
-    if (!verifyTradeSha(TradeInfo, TradeSha)) {
-      console.error("TradeSha 驗證失敗");
-      return res.send("SUCCESS");
-    }
 
-    console.log("TradeSha 驗證成功");
-
-    // 2. 解密 TradeInfo
-
-    let data: any;
-    data = aesDecrypt(TradeInfo);
+    const tradeInfo = req.body?.TradeInfo;
+    console.log(tradeInfo);
+    const data: any = aesDecrypt(tradeInfo);
     console.log("解密後的 data:", data);
     const { Status, Result } = data;
     if (Status === "SUCCESS") {
