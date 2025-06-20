@@ -6,7 +6,7 @@ async function cleanup() {
 
   const result = await prisma.order.deleteMany({
     where: {
-      userId: "9da192f5-1683-4fdc-acec-157f0a89c233",
+      userId: "157cb968-b516-4c87-a315-c809b2f01b56",
     },
   });
 
