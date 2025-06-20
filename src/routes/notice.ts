@@ -19,11 +19,18 @@ const verifyTradeSha = (tradeInfo: string, tradeSha: string) => {
   return calculatedSha === tradeSha;
 };
 
+// const aesDecrypt = (encryptedText: string) => {
+//   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
+//   const key = Buffer.from(HASH_KEY, "utf8");
+//   const iv = Buffer.from(HASH_IV, "utf8");
+//   const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
+//   let decrypted = decipher.update(encryptedText, "hex", "utf8");
+//   decrypted += decipher.final("utf8");
+//   return qs.parse(decrypted);
+// };
 const aesDecrypt = (encryptedText: string) => {
   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
-  const key = Buffer.from(HASH_KEY, "utf8");
-  const iv = Buffer.from(HASH_IV, "utf8");
-  const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
+  const decipher = crypto.createDecipheriv("aes-256-cbc", HASH_KEY, HASH_IV);
   let decrypted = decipher.update(encryptedText, "hex", "utf8");
   decrypted += decipher.final("utf8");
   return qs.parse(decrypted);
