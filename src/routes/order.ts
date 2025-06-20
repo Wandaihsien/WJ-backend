@@ -71,7 +71,7 @@ router.get("/", async (req: Request, res: Response) => {
 
   try {
     const orders = await prisma.order.findMany({
-      where: { userId },
+      where: { userId, status: "paid" },
       orderBy: { date: "desc" },
     });
 

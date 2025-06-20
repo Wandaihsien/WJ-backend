@@ -52,6 +52,26 @@ router.post("/", async (req: Request, res: Response) => {
       });
       console.log("資料庫 tradeNo:", Result.MerchantOrderNo);
       console.log("訂單狀態已更新為 paid");
+      const order = await prisma.order.findUnique({
+        where: { tradeNo: Result.MerchantOrderNo },
+        select: { userId: true },
+      });
+
+      if (!order) {
+        throw new Error("找不到訂單");
+      }
+
+      const userCart = await prisma.cart.findUnique({
+        where: { userId: order.userId },
+        select: { id: true },
+      });
+
+      if (userCart) {
+        await prisma.cartItem.deleteMany({
+          where: { cartId: userCart.id },
+        });
+        console.log("購物車已清空:", userCart.id);
+      }
     }
     res.send("SUCCESS");
   } catch (error) {
