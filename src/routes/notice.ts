@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import crypto from "crypto";
-import qs from "qs";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -40,10 +39,9 @@ const aesDecrypt = (encryptedText: string) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    console.log("收到藍新回調:,");
     const tradeInfo = req.body?.TradeInfo;
     const data: any = aesDecrypt(tradeInfo);
-    console.log("解密後的 data:", data);
+
     const { Status, Result } = data;
     if (Status === "SUCCESS") {
       await prisma.order.update({
