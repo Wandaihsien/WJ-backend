@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import { OAuth2Client } from "google-auth-library";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -88,5 +89,42 @@ export const login = async (req: Request, res: Response) => {
   } catch (err) {
     console.error("登入失敗:", err);
     res.status(500).json({ message: "伺服器錯誤" });
+  }
+};
+
+// Google登入功能
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+export const googleLogin = async (req: Request, res: Response) => {
+  const { token } = req.body;
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const email = payload?.email;
+    if (!email) {
+      return res.status(400).json({ error: "無效的 Google 資料" });
+    }
+
+    let user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email,
+          password: "",
+        },
+      });
+    }
+    const generateToken = (userId: string) =>
+      jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+
+    res.status(200).json({
+      token: generateToken(user.id),
+      user: { id: user.id, email: user.email },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ error: "Google 驗證失敗" });
   }
 };

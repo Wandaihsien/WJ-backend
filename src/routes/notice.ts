@@ -11,8 +11,6 @@ const HASH_IV = process.env.HASH_IV;
 if (!HASH_KEY || !HASH_IV) {
   throw new Error("環境變數 HASH_KEY 或 HASH_IV 沒有正確讀取！");
 }
-console.log("HASH_KEY:", HASH_KEY, "length:", HASH_KEY.length);
-console.log("HASH_IV:", HASH_IV, "length:", HASH_IV.length);
 
 const aesDecrypt = (encryptedText: string) => {
   const key = Buffer.from(HASH_KEY, "utf8");
@@ -48,8 +46,6 @@ router.post("/", async (req: Request, res: Response) => {
         where: { tradeNo: Result.MerchantOrderNo },
         data: { status: "paid" },
       });
-      console.log("資料庫 tradeNo:", Result.MerchantOrderNo);
-      console.log("訂單狀態已更新為 paid");
       const order = await prisma.order.findUnique({
         where: { tradeNo: Result.MerchantOrderNo },
         select: { userId: true },
@@ -68,7 +64,6 @@ router.post("/", async (req: Request, res: Response) => {
         await prisma.cartItem.deleteMany({
           where: { cartId: userCart.id },
         });
-        console.log("購物車已清空:", userCart.id);
       }
     }
     res.send("SUCCESS");

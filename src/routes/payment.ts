@@ -12,8 +12,7 @@ const PAY_GATEWAY = "https://ccore.newebpay.com/MPG/mpg_gateway";
 if (!HASH_KEY || !HASH_IV) {
   throw new Error("環境變數 HASH_KEY 或 HASH_IV 沒有正確讀取！");
 }
-console.log("PHASH_KEY:", HASH_KEY, "length:", HASH_KEY.length);
-console.log("PHASH_IV:", HASH_IV, "length:", HASH_IV.length);
+
 // 將交易資料進行 AES 加密（AES-256-CBC）
 const aesEncrypt = (data: string) => {
   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
@@ -57,8 +56,6 @@ router.post("/", async (req: Request, res: Response) => {
 
     const encrypted = aesEncrypt(qs.stringify(tradeInfo));
     const tradeSha = makeTradeSha(encrypted);
-
-    console.log(`支付請求建立成功 - 訂單: ${orderNo}, 金額: ${total}`);
 
     res.json({
       MerchantID: MERCHANT_ID,

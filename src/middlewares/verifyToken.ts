@@ -7,7 +7,6 @@ export const verifyToken = (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
-  //  console.log('verifyToken middleware - authHeader:', req.headers.authorization)
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "未提供 token" });
   }
@@ -16,7 +15,6 @@ export const verifyToken = (
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    // console.log('JWT decoded:', decoded);
     (req as any).user = decoded;
     next();
   } catch (error) {
