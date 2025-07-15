@@ -29,7 +29,7 @@ export const register = async (req: Request, res: Response) => {
     });
 
     if (existingUser) {
-      return res.status(400).json({ message: "此Email已被註冊" });
+      return res.status(409).json({ message: "此Email已被註冊" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

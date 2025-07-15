@@ -13,7 +13,7 @@ if (!HASH_KEY || !HASH_IV) {
   throw new Error("環境變數 HASH_KEY 或 HASH_IV 沒有正確讀取！");
 }
 
-// 將交易資料進行 AES 加密（AES-256-CBC）
+// 將交易資料進行 AES 加密
 const aesEncrypt = (data: string) => {
   if (!HASH_KEY || !HASH_IV) throw new Error("缺少金鑰設定");
   const key = Buffer.from(HASH_KEY, "utf8");
@@ -24,7 +24,7 @@ const aesEncrypt = (data: string) => {
   return encrypted;
 };
 
-// 對加密資料產生 SHA256 雜湊（變成 TradeSha）
+// 對加密資料產生 SHA256 雜湊
 const makeTradeSha = (encryptedData: string) => {
   const raw = `HashKey=${HASH_KEY}&${encryptedData}&HashIV=${HASH_IV}`;
   return crypto.createHash("sha256").update(raw).digest("hex").toUpperCase();

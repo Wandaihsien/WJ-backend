@@ -29,7 +29,6 @@ const aesDecrypt = (encryptedText: string) => {
     .slice(0, decrypted.length - padding)
     .toString("utf8");
 
-  // 解析 JSON
   const jsonData = JSON.parse(result);
 
   return jsonData;
